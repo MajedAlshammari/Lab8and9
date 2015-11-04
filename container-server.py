@@ -36,10 +36,10 @@ DELETE /images                      Delete all images
 def containers_index():
 
     if request.args.get('state') == 'running':
-    output = docker('ps')
+      output = docker('ps')
     else:
-    output = docker('ps', '-a')
-    resp = json.dumps(docker_ps_to_array(output))
+      output = docker('ps', '-a')
+      resp = json.dumps(docker_ps_to_array(output))
     return Response(response=resp, mimetype="application/json")
 
 @app.route('/images', methods=['GET'])
