@@ -35,8 +35,7 @@ DELETE /images                      Delete all images
 @app.route('/containers', methods=['GET'])
 def containers_index():
 
-   curl -s -X GET -H 'Accept: application/json'
-  http://localhost:8080/containers | python -mjson.tool
+   curl -s -X GET -H 'Accept: application/json' http://localhost:8080/containers | python -mjson.tool
   curl -s -X GET -H 'Accept: application/json'
   http://localhost:8080/containers?state=running | python -mjson.tool
 
