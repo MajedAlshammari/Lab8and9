@@ -34,25 +34,27 @@ DELETE /images                      Delete all images
 
 @app.route('/containers', methods=['GET'])
 def containers_index():
-    """
-    List all containers
- 
-    curl -s -X GET -H 'Accept: application/json' http://localhost:8080/containers | python -mjson.tool
-    curl -s -X GET -H 'Accept: application/json' http://localhost:8080/containers?state=running | python -mjson.tool
 
-    """
+   curl -s -X GET -H 'Accept: application/json'
+  http://localhost:8080/containers | python -mjson.tool
+  curl -s -X GET -H 'Accept: application/json'
+  http://localhost:8080/containers?state=running | python -mjson.tool
 
-    resp = ''
+    if request.args.get('state') == 'running':
+    output = docker('ps')
+    else:
+    output = docker('ps', '-a')
+    resp = json.dumps(docker_ps_to_array(output))
     return Response(response=resp, mimetype="application/json")
 
 @app.route('/images', methods=['GET'])
 def images_index():
     """
-    List all images 
-    
-    Complete the code below generating a valid response. 
+    List all images
+
+    Complete the code below generating a valid response.
     """
-    
+
     resp = ''
     return Response(response=resp, mimetype="application/json")
 
@@ -110,7 +112,7 @@ def images_remove_all():
     Force remove all images - dangrous!
 
     """
- 
+
     resp = ''
     return Response(response=resp, mimetype="application/json")
 
@@ -141,7 +143,7 @@ def images_create():
 
     """
     dockerfile = request.files['file']
-    
+
     resp = ''
     return Response(response=resp, mimetype="application/json")
 
@@ -190,13 +192,13 @@ def docker(*args):
         print 'Error: {0} -> {1}'.format(' '.join(cmd), stderr)
     return stderr + stdout
 
-# 
+#
 # Docker output parsing helpers
 #
 
 #
 # Parses the output of a Docker PS command to a python List
-# 
+#
 def docker_ps_to_array(output):
     all = []
     for c in [line.split() for line in output.splitlines()[1:]]:
@@ -222,7 +224,7 @@ def docker_logs_to_object(id, output):
 
 #
 # Parses the output of a Docker image command to a python List
-# 
+#
 def docker_images_to_array(output):
     all = []
     for c in [line.split() for line in output.splitlines()[1:]]:
