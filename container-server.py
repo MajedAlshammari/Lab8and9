@@ -144,8 +144,11 @@ def images_create():
     Create image (from uploaded Dockerfile)
     curl -H 'Accept: application/json' -F file=@Dockerfile http://localhost:8080/images
     """
+    body = request.get_json(force=True)
+    file = body['file']
     dockerfile = request.files['file']
-    docker('build', '-t', 'dockerfile', '.')
+
+    docker('build', '--rm=true', '-f', 'Dockerfile', '.')
     resp = 'images %s has been built' % dockerfile 
     return Response(response=resp, mimetype="application/json")
 
